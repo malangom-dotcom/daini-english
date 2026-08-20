@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>다인이의 영어 Q&A 100일</title>
+<style>
+:root{
+  --bg:#f7f5ec;--card:#fff;--text:#283b2b;--muted:#747b74;--line:#e4e2d8;
+  --green:#4d9157;--green2:#e8f3e4;--dark:#315f39;--gold:#f4bd4e;
+  --purple:#7658b8;--orange:#f3a65a;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#eef0e8;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif}
+button{font:inherit;-webkit-tap-highlight-color:transparent}
+.app{max-width:560px;margin:auto;min-height:100vh;background:var(--bg);position:relative;overflow:hidden}
+.hidden{display:none!important}
+
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:15px 18px;background:rgba(255,253,247,.96);backdrop-filter:blur(10px);border-bottom:1px solid #e7e2d5}
+.brand{font-size:20px;font-weight:900}
+.coin{display:flex;align-items:center;gap:7px;background:#fff3b6;border:2px solid #e7c94f;border-radius:999px;padding:8px 13px;font-weight:900}
+
+.study{padding:18px 16px 118px}
+.daynav{display:grid;grid-template-columns:48px 1fr 48px;gap:9px;align-items:center;margin-bottom:15px}
+.navbtn{height:46px;border:0;border-radius:14px;background:#e4f0df;color:#32663a;font-size:26px;font-weight:900;cursor:pointer}
+.navbtn:disabled{opacity:.28}
+.daybox{text-align:center;background:#dcefd5;border-radius:16px;padding:10px}
+.daynum{font-size:17px;font-weight:900;color:#346a3c}
+.topic{font-size:13px;color:#668269;margin-top:3px}
+.levelrow{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px}
+.badge{font-size:12px;font-weight:800;padding:6px 9px;border-radius:999px;background:#eee}
+.badge.level{background:#f0eaff;color:#6d50ad}
+.badge.review{background:#fff1cc;color:#7a5c16}
+.words{padding:12px 13px;border-radius:14px;background:#fff7ea;border:1px solid #f1d39b;margin-bottom:14px}
+.words b{font-size:12px;color:#9a5d19}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}
+.chip{background:white;border:1px solid #efd8ae;border-radius:999px;padding:5px 9px;font-size:13px}
+
+.qa-card{background:white;border:1px solid var(--line);border-radius:20px;padding:17px;margin-bottom:14px;box-shadow:0 7px 22px rgba(0,0,0,.045)}
+.label{font-size:12px;font-weight:900;letter-spacing:.08em;color:#3b7c46;margin-bottom:6px}
+.q-en{font-size:22px;font-weight:900;line-height:1.4}
+.ko{font-size:14px;color:var(--muted);line-height:1.5;margin-top:5px}
+.answer{margin-top:12px;padding:13px 14px;border-radius:14px;background:#eef7ea}
+.answer .a-en{font-size:20px;font-weight:850;line-height:1.4}
+.card-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.smallbtn{border:0;border-radius:11px;padding:9px 11px;font-size:13px;font-weight:800;background:#edf4e9;color:#356d3d;cursor:pointer}
+.smallbtn.alt{background:#f4f0ff;color:#6747a5}
+.study-tools{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.toggle{border:1px solid #bad8b9;background:#edf7ea;color:#336b3b;border-radius:12px;padding:10px 13px;font-weight:800}
+.toggle.on{background:#4d9157;color:white;border-color:#4d9157}
+.hideko .ko{display:none}
+
+.bottom{position:fixed;left:50%;bottom:15px;transform:translateX(-50%);width:calc(100% - 30px);max-width:530px;z-index:45}
+.gamebtn{width:100%;border:0;border-radius:20px;padding:17px;background:#4c9557;color:white;font-size:18px;font-weight:900;box-shadow:0 10px 28px rgba(44,95,51,.28)}
+
+/* MAP */
+.map-page{min-height:100vh;background:
+radial-gradient(circle at 15% 15%,rgba(255,255,255,.3) 0 3%,transparent 4%),
+linear-gradient(#bfd9af,#94ba84);padding:12px 12px 115px;position:relative}
+.map-header{position:sticky;top:0;z-index:25;display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:8px;padding:4px 0 10px}
+.roundbtn{width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.92);font-size:22px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.map-title{text-align:center;font-size:21px;font-weight:900}
+.map{position:relative;min-height:9350px}
+.road{position:absolute;left:50%;transform:translateX(-50%);width:22px;top:30px;bottom:30px;background:#eee8ce;border:4px solid rgba(255,255,255,.45);border-radius:999px;box-shadow:0 0 20px rgba(0,0,0,.08)}
+.node{position:absolute;left:50%;transform:translateX(-50%);width:52px;height:52px;border-radius:50%;border:4px solid white;display:flex;align-items:center;justify-content:center;font-weight:900;color:white;background:#98b98c;box-shadow:0 5px 13px rgba(0,0,0,.14)}
+.node.done{background:#468b50}
+.node.current{background:var(--gold);color:#463713;transform:translateX(-50%) scale(1.14);box-shadow:0 0 0 7px rgba(255,222,120,.35),0 6px 17px rgba(0,0,0,.18)}
+.node.locked{background:#9da99a;opacity:.65}
+.node.big{width:70px;height:70px;background:#4e7e50}
+.node.big.current{background:var(--gold)}
+.shop{position:absolute;left:calc(50% + 62px);background:#fff8df;border:2px solid #eadb9d;border-radius:15px;padding:8px 10px;font-size:12px;font-weight:900;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.deco{position:absolute;font-size:27px;opacity:.8;pointer-events:none}
+.capy{position:absolute;left:calc(50% - 100px);width:78px;height:66px;z-index:8;filter:drop-shadow(0 6px 5px rgba(0,0,0,.2))}
+.capy-body{position:absolute;width:59px;height:46px;left:12px;top:16px;background:#a76d3f;border-radius:52% 54% 44% 46%}
+.capy-head{position:absolute;width:44px;height:40px;left:0;top:2px;background:#b87a46;border-radius:48% 55% 48% 52%}
+.capy-snout{position:absolute;width:24px;height:17px;left:-7px;top:18px;background:#c98d58;border-radius:55%}
+.capy-ear{position:absolute;width:10px;height:10px;top:-3px;background:#74462d;border-radius:50%}
+.capy-ear.e1{left:9px} .capy-ear.e2{left:28px}
+.capy-eye{position:absolute;width:5px;height:5px;left:10px;top:15px;border-radius:50%;background:#19120f}
+.capy-nose{position:absolute;width:6px;height:5px;left:-4px;top:24px;border-radius:50%;background:#261711}
+.capy-leg{position:absolute;width:10px;height:14px;background:#87542f;bottom:-6px;border-radius:0 0 6px 6px}
+.capy-leg.l1{left:22px} .capy-leg.l2{right:7px}
+.capy-name{position:absolute;top:69px;left:-7px;background:rgba(255,255,255,.94);padding:4px 8px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap;color:#416c45}
+.questbar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);width:calc(100% - 28px);max-width:532px;z-index:40;background:rgba(255,255,255,.95);padding:11px;border-radius:22px;box-shadow:0 9px 28px rgba(0,0,0,.18)}
+.questbtn{width:100%;border:0;border-radius:16px;padding:15px;background:#315f39;color:white;font-size:17px;font-weight:900}
+
+/* QUEST */
+.modal{position:fixed;inset:0;z-index:100;background:rgba(28,42,29,.62);display:flex;align-items:center;justify-content:center;padding:17px}
+.modal-card{width:100%;max-width:500px;max-height:90vh;overflow:auto;background:white;border-radius:25px;padding:20px}
+.quest-title{font-size:25px;font-weight:900;margin-bottom:7px}
+.quest-help{font-size:14px;line-height:1.55;color:#707770;margin-bottom:16px}
+.question{border:1px solid #e2e4df;border-radius:18px;padding:16px;margin-bottom:13px}
+.qno{font-size:12px;font-weight:900;color:#4e8255;margin-bottom:6px}
+.quest-q{font-size:20px;font-weight:900;line-height:1.4}
+.quest-answer{margin:11px 0;background:#fff6d9;border-radius:13px;padding:12px}
+.answer-hidden{filter:blur(7px);user-select:none}
+.quest-a{font-size:19px;font-weight:900;line-height:1.4}
+.qtools{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0}
+.qtool{border:0;border-radius:11px;padding:10px 7px;font-weight:800;background:#edf4e9;color:#356b3c}
+.qtool.hint{background:#fff1c8;color:#74591b}
+.mic{width:100%;border:0;border-radius:13px;padding:13px;background:#dff1df;color:#2e6c37;font-size:16px;font-weight:900}
+.heard{min-height:20px;margin-top:8px;font-size:13px;color:#666;line-height:1.5}
+.pass{color:#267a31;font-weight:900} .fail{color:#b13a3a;font-weight:900}
+.actions{display:flex;gap:8px;margin-top:15px}
+.secondary,.primary{flex:1;border:0;border-radius:13px;padding:13px;font-weight:900}
+.secondary{background:#eee} .primary{background:#4d9157;color:white}
+.result{text-align:center;padding:12px 0}
+.big{font-size:54px} .result h2{margin:4px 0 8px} .result p{color:#666;line-height:1.65}
+
+@media(max-width:420px){
+ .q-en{font-size:20px} .answer .a-en{font-size:18px} .study{padding-left:11px;padding-right:11px}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+<section id="studyScreen">
+  <div class="topbar">
+    <div class="brand">다인이의 영어 Q&A</div>
+    <div class="coin">🪙 <span id="coinCount">0</span></div>
+  </div>
+  <div class="study" id="studyWrap">
+    <div class="daynav">
+      <button class="navbtn" id="prevDay">‹</button>
+      <div class="daybox">
+        <div class="daynum" id="dayNum"></div>
+        <div class="topic" id="topic"></div>
+      </div>
+      <button class="navbtn" id="nextDay">›</button>
+    </div>
+
+    <div class="levelrow" id="badges"></div>
+    <div id="wordsBox"></div>
+    <div id="qaList"></div>
+
+    <div class="study-tools">
+      <button class="toggle" id="toggleKo">가나다 한국어 뜻 숨기기</button>
+      <span style="font-size:12px;color:#8a918a">질문을 듣고 먼저 대답해 보세요.</span>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <button class="gamebtn" id="openMap">🌲 영어 숲으로 가기</button>
+  </div>
+</section>
+
+<section id="mapScreen" class="hidden">
+  <div class="map-page">
+    <div class="map-header">
+      <button class="roundbtn" id="backStudy">←</button>
+      <div class="map-title">🌳 영어 숲 대모험</div>
+      <div class="coin">🪙 <span id="mapCoins">0</span></div>
+    </div>
+    <div class="map" id="map"><div class="road"></div></div>
+  </div>
+  <div class="questbar">
+    <button class="questbtn" id="startQuest">🎤 DAY <span id="questDay">1</span> 말하기 퀘스트</button>
+  </div>
+</section>
+</div>
+
+<div class="modal hidden" id="questModal">
+  <div class="modal-card">
+    <div id="questContent">
+      <div class="quest-title">🎤 말하기 퀘스트</div>
+      <div class="quest-help">
+        영어 질문을 듣고 영어로 대답해 보세요.<br>
+        모르겠으면 <b>정답 보기</b> 또는 <b>정답 듣기</b>로 연습한 뒤 따라 말해도 됩니다.
+      </div>
+      <div id="questions"></div>
+      <div class="actions">
+        <button class="secondary" id="closeQuest">닫기</button>
+        <button class="primary" id="checkQuest">결과 확인</button>
+      </div>
+    </div>
+    <div id="resultContent" class="hidden"></div>
+  </div>
+</div>
+
+<script>
+const DAYS=[{"topic": "마실 것", "level": "기본", "words": [], "pairs": [{"q": "What do you want to drink?", "a": "I want some juice.", "qk": "뭐 마시고 싶어?", "ak": "주스 마시고 싶어요."}, {"q": "Is the water cold?", "a": "Yes, it's cold.", "qk": "물 차가워?", "ak": "네, 차가워요."}, {"q": "Can I have some milk?", "a": "Sure. Here you are.", "qk": "우유 좀 마셔도 돼요?", "ak": "그럼. 여기 있어."}]}, {"topic": "아침 식사", "level": "기본", "words": [], "pairs": [{"q": "What do you want for breakfast?", "a": "I want some toast.", "qk": "아침으로 뭐 먹고 싶어?", "ak": "토스트 먹고 싶어요."}, {"q": "Do you like eggs?", "a": "Yes, I like eggs.", "qk": "달걀 좋아해?", "ak": "네, 달걀 좋아해요."}, {"q": "Are you hungry?", "a": "Yes, I'm very hungry.", "qk": "배고파?", "ak": "네, 많이 배고파요."}]}, {"topic": "좋아하는 음식", "level": "기본", "words": [], "pairs": [{"q": "What's your favorite food?", "a": "My favorite food is pizza.", "qk": "가장 좋아하는 음식이 뭐야?", "ak": "피자를 제일 좋아해요."}, {"q": "Do you like noodles?", "a": "Yes, I love noodles.", "qk": "면 요리 좋아해?", "ak": "네, 정말 좋아해요."}, {"q": "Is this food spicy?", "a": "No, it's not spicy.", "qk": "이 음식 매워?", "ak": "아니요, 안 매워요."}]}, {"topic": "간식", "level": "기본", "words": [], "pairs": [{"q": "Do you want a snack?", "a": "Yes, I want an apple.", "qk": "간식 먹을래?", "ak": "네, 사과 먹고 싶어요."}, {"q": "Which cookie do you want?", "a": "I want the chocolate one.", "qk": "어떤 쿠키 먹고 싶어?", "ak": "초콜릿 쿠키요."}, {"q": "Can I have one more?", "a": "Okay, just one more.", "qk": "하나 더 먹어도 돼요?", "ak": "그래, 하나만 더."}]}, {"topic": "식탁에서", "level": "기본", "words": [], "pairs": [{"q": "Can you pass me the water?", "a": "Sure. Here you are.", "qk": "물 좀 건네줄래?", "ak": "그럼. 여기 있어."}, {"q": "Do you need a spoon?", "a": "Yes, I need a spoon.", "qk": "숟가락 필요해?", "ak": "네, 필요해요."}, {"q": "Are you finished?", "a": "Yes, I'm full now.", "qk": "다 먹었어?", "ak": "네, 이제 배불러요."}]}, {"topic": "학교 갈 준비", "level": "기본", "words": [], "pairs": [{"q": "Are you ready for school?", "a": "Almost. I need my bag.", "qk": "학교 갈 준비됐어?", "ak": "거의요. 가방이 필요해요."}, {"q": "Where are your shoes?", "a": "They're by the door.", "qk": "신발 어디 있어?", "ak": "문 옆에 있어요."}, {"q": "Do you have your lunch box?", "a": "Yes, it's in my bag.", "qk": "도시락 챙겼어?", "ak": "네, 가방 안에 있어요."}]}, {"topic": "아침 습관", "level": "기본", "words": [], "pairs": [{"q": "What do you do first?", "a": "I wash my face.", "qk": "먼저 뭐 해?", "ak": "세수해요."}, {"q": "Did you brush your teeth?", "a": "Yes, I brushed my teeth.", "qk": "양치했어?", "ak": "네, 양치했어요."}, {"q": "Are you still sleepy?", "a": "No, I'm awake now.", "qk": "아직 졸려?", "ak": "아니요, 이제 깼어요."}]}, {"topic": "옷 입기", "level": "기본", "words": [], "pairs": [{"q": "What are you wearing?", "a": "I'm wearing a blue shirt.", "qk": "뭐 입고 있어?", "ak": "파란 셔츠 입고 있어요."}, {"q": "Do these shoes fit?", "a": "Yes, they fit well.", "qk": "이 신발 잘 맞아?", "ak": "네, 잘 맞아요."}, {"q": "Where is your jacket?", "a": "It's on the chair.", "qk": "재킷 어디 있어?", "ak": "의자 위에 있어요."}]}, {"topic": "날씨", "level": "기본", "words": [], "pairs": [{"q": "How's the weather today?", "a": "It's sunny today.", "qk": "오늘 날씨 어때?", "ak": "오늘은 맑아요."}, {"q": "Is it cold outside?", "a": "A little. I need a jacket.", "qk": "밖에 추워?", "ak": "조금요. 재킷이 필요해요."}, {"q": "Do we need an umbrella?", "a": "No, we don't need one.", "qk": "우산 필요해?", "ak": "아니요, 필요 없어요."}]}, {"topic": "집에서 출발", "level": "기본", "words": [], "pairs": [{"q": "Where are we going?", "a": "We're going to school.", "qk": "우리 어디 가?", "ak": "학교에 가요."}, {"q": "Can we go now?", "a": "Yes, let's go.", "qk": "이제 가도 돼?", "ak": "네, 가요."}, {"q": "Did you close the door?", "a": "Yes, I closed it.", "qk": "문 닫았어?", "ak": "네, 닫았어요."}]}, {"topic": "학교 하루", "level": "기본", "words": [], "pairs": [{"q": "How was school today?", "a": "It was fun today.", "qk": "오늘 학교 어땠어?", "ak": "오늘 재미있었어요."}, {"q": "What did you learn?", "a": "I learned about animals.", "qk": "뭐 배웠어?", "ak": "동물에 대해 배웠어요."}, {"q": "Do you have homework?", "a": "Yes, I have some math homework.", "qk": "숙제 있어?", "ak": "네, 수학 숙제 있어요."}]}, {"topic": "교실", "level": "기본", "words": [], "pairs": [{"q": "Where is your pencil?", "a": "It's on my desk.", "qk": "연필 어디 있어?", "ak": "제 책상 위에 있어요."}, {"q": "Can I borrow your eraser?", "a": "Sure. You can use mine.", "qk": "지우개 빌려도 돼?", "ak": "그럼. 내 거 써."}, {"q": "Do you understand this?", "a": "Yes, I understand it.", "qk": "이거 이해했어?", "ak": "네, 이해했어요."}]}, {"topic": "선생님께 질문", "level": "기본", "words": [], "pairs": [{"q": "Can you say it again?", "a": "Of course. Listen carefully.", "qk": "다시 말해주실래요?", "ak": "물론이지. 잘 들어봐."}, {"q": "May I ask a question?", "a": "Yes, go ahead.", "qk": "질문해도 될까요?", "ak": "그래, 해봐."}, {"q": "Is my answer right?", "a": "Yes, your answer is right.", "qk": "제 답이 맞나요?", "ak": "네, 맞아요."}]}, {"topic": "친구", "level": "기본", "words": [], "pairs": [{"q": "Who did you play with?", "a": "I played with Mina.", "qk": "누구랑 놀았어?", "ak": "미나랑 놀았어요."}, {"q": "What did you play?", "a": "We played tag.", "qk": "뭐 하고 놀았어?", "ak": "술래잡기 했어요."}, {"q": "Did you have fun?", "a": "Yes, we had a lot of fun.", "qk": "재미있었어?", "ak": "네, 정말 재미있었어요."}]}, {"topic": "운동장", "level": "기본", "words": [], "pairs": [{"q": "What do you want to play?", "a": "I want to play soccer.", "qk": "뭐 하고 놀고 싶어?", "ak": "축구하고 싶어요."}, {"q": "Can you run fast?", "a": "Yes, I can run fast.", "qk": "빨리 달릴 수 있어?", "ak": "네, 빨리 달릴 수 있어요."}, {"q": "Whose turn is it?", "a": "It's my turn now.", "qk": "누구 차례야?", "ak": "지금 제 차례예요."}]}, {"topic": "미술", "level": "기본", "words": [], "pairs": [{"q": "What are you drawing?", "a": "I'm drawing a cat.", "qk": "뭐 그리고 있어?", "ak": "고양이 그리고 있어요."}, {"q": "What color do you need?", "a": "I need green.", "qk": "무슨 색 필요해?", "ak": "초록색이 필요해요."}, {"q": "Do you like art class?", "a": "Yes, drawing is fun.", "qk": "미술 수업 좋아해?", "ak": "네, 그림 그리기가 재미있어요."}]}, {"topic": "음악", "level": "기본", "words": [], "pairs": [{"q": "Can you play the piano?", "a": "Yes, I can play a little.", "qk": "피아노 칠 수 있어?", "ak": "네, 조금 칠 수 있어요."}, {"q": "What song do you like?", "a": "I like this song.", "qk": "무슨 노래 좋아해?", "ak": "이 노래 좋아해요."}, {"q": "Is the music too loud?", "a": "No, it sounds good.", "qk": "음악 너무 커?", "ak": "아니요, 듣기 좋아요."}]}, {"topic": "책 읽기", "level": "기본", "words": [], "pairs": [{"q": "What are you reading?", "a": "I'm reading a storybook.", "qk": "뭐 읽고 있어?", "ak": "동화책 읽고 있어요."}, {"q": "Is the story funny?", "a": "Yes, it's very funny.", "qk": "이야기 웃겨?", "ak": "네, 아주 웃겨요."}, {"q": "Who is your favorite character?", "a": "I like the little rabbit.", "qk": "가장 좋아하는 등장인물은 누구야?", "ak": "작은 토끼가 좋아요."}]}, {"topic": "수학", "level": "기본", "words": [], "pairs": [{"q": "Is this question easy?", "a": "Yes, it's easy for me.", "qk": "이 문제 쉬워?", "ak": "네, 저한테는 쉬워요."}, {"q": "What is ten plus five?", "a": "Ten plus five is fifteen.", "qk": "10 더하기 5는 뭐야?", "ak": "15예요."}, {"q": "Do you like math?", "a": "Sometimes. I like number games.", "qk": "수학 좋아해?", "ak": "가끔요. 숫자 게임은 좋아해요."}]}, {"topic": "방과 후", "level": "기본", "words": [], "pairs": [{"q": "What do you do after school?", "a": "I do my homework first.", "qk": "학교 끝나고 뭐 해?", "ak": "먼저 숙제해요."}, {"q": "Do you have a class today?", "a": "Yes, I have art class.", "qk": "오늘 수업 있어?", "ak": "네, 미술 수업 있어요."}, {"q": "When can you play?", "a": "I can play after dinner.", "qk": "언제 놀 수 있어?", "ak": "저녁 먹고 놀 수 있어요."}]}, {"topic": "내 방", "level": "기본", "words": [], "pairs": [{"q": "Where are you?", "a": "I'm in my room.", "qk": "어디 있어?", "ak": "제 방에 있어요."}, {"q": "What are you doing?", "a": "I'm cleaning my desk.", "qk": "뭐 하고 있어?", "ak": "책상을 정리하고 있어요."}, {"q": "Is your room clean?", "a": "Almost. I need five more minutes.", "qk": "방 깨끗해?", "ak": "거의요. 5분만 더 필요해요."}]}, {"topic": "가족", "level": "기본", "words": [], "pairs": [{"q": "Who is at home?", "a": "Mom and Dad are home.", "qk": "집에 누가 있어?", "ak": "엄마랑 아빠가 있어요."}, {"q": "What is Mom doing?", "a": "She's making dinner.", "qk": "엄마 뭐 하고 있어?", "ak": "저녁 만들고 있어요."}, {"q": "Is Dad busy?", "a": "No, he's watching TV.", "qk": "아빠 바빠?", "ak": "아니요, TV 보고 있어요."}]}, {"topic": "집안일", "level": "기본", "words": [], "pairs": [{"q": "Can you help me?", "a": "Sure. What should I do?", "qk": "도와줄래?", "ak": "네. 뭐 하면 돼요?"}, {"q": "Can you put this away?", "a": "Yes, I'll put it away.", "qk": "이거 치워줄래?", "ak": "네, 치울게요."}, {"q": "Did you clean your room?", "a": "Yes, I cleaned it.", "qk": "방 청소했어?", "ak": "네, 청소했어요."}]}, {"topic": "목욕", "level": "기본", "words": [], "pairs": [{"q": "Is the water warm?", "a": "Yes, it's warm enough.", "qk": "물 따뜻해?", "ak": "네, 충분히 따뜻해요."}, {"q": "Do you need a towel?", "a": "Yes, please bring me one.", "qk": "수건 필요해?", "ak": "네, 하나 가져다주세요."}, {"q": "Are you done?", "a": "Not yet. Give me a minute.", "qk": "다 했어?", "ak": "아직요. 잠깐만요."}]}, {"topic": "잠자기 전", "level": "기본", "words": [], "pairs": [{"q": "Are you sleepy?", "a": "Yes, I'm very sleepy.", "qk": "졸려?", "ak": "네, 많이 졸려요."}, {"q": "Did you brush your teeth?", "a": "Yes, I did it already.", "qk": "양치했어?", "ak": "네, 벌써 했어요."}, {"q": "What time is it?", "a": "It's nine o'clock.", "qk": "몇 시야?", "ak": "9시예요."}]}, {"topic": "기분", "level": "기본", "words": [], "pairs": [{"q": "How do you feel?", "a": "I feel happy today.", "qk": "기분이 어때?", "ak": "오늘 기분 좋아요."}, {"q": "Are you worried about anything?", "a": "No, I'm okay.", "qk": "걱정되는 거 있어?", "ak": "아니요, 괜찮아요."}, {"q": "What made you smile?", "a": "My friend made me smile.", "qk": "뭐 때문에 웃었어?", "ak": "친구 때문에 웃었어요."}]}, {"topic": "아플 때", "level": "기본", "words": [], "pairs": [{"q": "What's wrong?", "a": "My stomach hurts.", "qk": "어디가 아파?", "ak": "배가 아파요."}, {"q": "Do you have a fever?", "a": "No, I don't have a fever.", "qk": "열 있어?", "ak": "아니요, 열은 없어요."}, {"q": "Do you want to rest?", "a": "Yes, I want to lie down.", "qk": "쉴래?", "ak": "네, 누워 있고 싶어요."}]}, {"topic": "몸", "level": "기본", "words": [], "pairs": [{"q": "Where is your elbow?", "a": "Here is my elbow.", "qk": "팔꿈치 어디 있지?", "ak": "여기요."}, {"q": "How many fingers do you have?", "a": "I have ten fingers.", "qk": "손가락 몇 개야?", "ak": "열 개요."}, {"q": "Can you touch your toes?", "a": "Yes, I can touch them.", "qk": "발가락 만질 수 있어?", "ak": "네, 만질 수 있어요."}]}, {"topic": "운동", "level": "기본", "words": [], "pairs": [{"q": "What sport do you like?", "a": "I like swimming.", "qk": "무슨 운동 좋아해?", "ak": "수영 좋아해요."}, {"q": "Can you ride a bike?", "a": "Yes, I can ride well.", "qk": "자전거 탈 수 있어?", "ak": "네, 잘 탈 수 있어요."}, {"q": "Do you want to practice today?", "a": "Yes, let's practice together.", "qk": "오늘 연습할래?", "ak": "네, 같이 연습해요."}]}, {"topic": "춤", "level": "기본", "words": [], "pairs": [{"q": "Do you like dancing?", "a": "Yes, I love dancing.", "qk": "춤추는 거 좋아해?", "ak": "네, 정말 좋아해요."}, {"q": "Can you show me a move?", "a": "Sure. Watch me.", "qk": "동작 하나 보여줄래?", "ak": "네. 보세요."}, {"q": "Is this move difficult?", "a": "A little, but I can do it.", "qk": "이 동작 어려워?", "ak": "조금요, 그래도 할 수 있어요."}]}, {"topic": "쇼핑", "level": "기본", "words": [], "pairs": [{"q": "What do you want to buy?", "a": "I think I'll get a notebook.", "qk": "뭐 사고 싶어?", "ak": "공책 하나 살 것 같아요."}, {"q": "How much is this?", "a": "It's five dollars.", "qk": "이거 얼마예요?", "ak": "5달러예요."}, {"q": "Do you like this one?", "a": "Yeah, the blue one looks nice.", "qk": "이거 마음에 들어?", "ak": "응, 파란색이 괜찮아 보여요."}]}, {"topic": "옷 가게", "level": "기본", "words": [], "pairs": [{"q": "Can I try this on?", "a": "Sure. The fitting room is over there.", "qk": "이거 입어봐도 돼요?", "ak": "물론이죠. 탈의실은 저쪽이에요."}, {"q": "How does it fit?", "a": "Pretty well, actually.", "qk": "잘 맞아?", "ak": "생각보다 잘 맞아요."}, {"q": "Which color do you like?", "a": "I like the pink one better.", "qk": "무슨 색이 좋아?", "ak": "분홍색이 더 좋아요."}]}, {"topic": "장난감 가게", "level": "기본", "words": [], "pairs": [{"q": "Which toy do you want?", "a": "I like the little robot.", "qk": "어떤 장난감 갖고 싶어?", "ak": "작은 로봇이 좋아요."}, {"q": "Is it expensive?", "a": "Not really.", "qk": "비싸?", "ak": "별로 안 비싸요."}, {"q": "Can we get it today?", "a": "Maybe. Let's check the price first.", "qk": "오늘 살 수 있어?", "ak": "아마도. 먼저 가격부터 보자."}]}, {"topic": "서점", "level": "기본", "words": [], "pairs": [{"q": "What book are you looking for?", "a": "I'm looking for a comic book.", "qk": "무슨 책 찾고 있어?", "ak": "만화책 찾고 있어요."}, {"q": "Do you like this one?", "a": "Yeah, it looks fun.", "qk": "이거 좋아?", "ak": "응, 재미있어 보여요."}, {"q": "Can I read it here?", "a": "Sure, go ahead.", "qk": "여기서 읽어도 돼요?", "ak": "그럼, 읽어."}]}, {"topic": "도서관", "level": "기본", "words": [], "pairs": [{"q": "What kind of book do you want?", "a": "Maybe a science book.", "qk": "어떤 책 보고 싶어?", "ak": "과학책이 좋을 것 같아요."}, {"q": "Can I borrow this one?", "a": "Yep, you can check it out.", "qk": "이거 빌려도 돼요?", "ak": "응, 대출할 수 있어."}, {"q": "When do I have to bring it back?", "a": "Next week.", "qk": "언제 돌려줘야 해요?", "ak": "다음 주에."}]}, {"topic": "식당", "level": "기본", "words": [], "pairs": [{"q": "What would you like?", "a": "Can I get the chicken, please?", "qk": "뭘 드릴까요?", "ak": "치킨 주세요."}, {"q": "Want some water?", "a": "Yeah, please. I'm thirsty.", "qk": "물 마실래?", "ak": "응, 목말라요."}, {"q": "How's your food?", "a": "It's really good.", "qk": "음식 어때?", "ak": "정말 맛있어요."}]}, {"topic": "카페", "level": "기본", "words": [], "pairs": [{"q": "What do you want to drink?", "a": "I'll have a hot chocolate.", "qk": "뭐 마시고 싶어?", "ak": "핫초코 마실래요."}, {"q": "Hot or iced?", "a": "Iced, please.", "qk": "뜨겁게 아니면 아이스로?", "ak": "아이스로 주세요."}, {"q": "Do you need a straw?", "a": "Yeah, please.", "qk": "빨대 필요해?", "ak": "응, 주세요."}]}, {"topic": "아이스크림", "level": "기본", "words": [], "pairs": [{"q": "What flavor do you want?", "a": "Chocolate, please.", "qk": "무슨 맛 먹고 싶어?", "ak": "초콜릿 맛 주세요."}, {"q": "One scoop or two?", "a": "Just one.", "qk": "한 스쿱 아니면 두 스쿱?", "ak": "하나만요."}, {"q": "Cone or cup?", "a": "A cone, please.", "qk": "콘이 좋아, 컵이 좋아?", "ak": "콘이요."}]}, {"topic": "공원", "level": "기본", "words": [], "pairs": [{"q": "What do you see?", "a": "I see a huge tree.", "qk": "뭐 보여?", "ak": "엄청 큰 나무가 보여요."}, {"q": "Want to feed the ducks?", "a": "Yeah, that sounds fun.", "qk": "오리한테 먹이 줄래?", "ak": "응, 재미있겠다."}, {"q": "Where should we walk?", "a": "Let's go by the lake.", "qk": "어디로 걸을까?", "ak": "호수 쪽으로 가요."}]}, {"topic": "동물원", "level": "기본", "words": [], "pairs": [{"q": "What animal do you want to see first?", "a": "The elephants!", "qk": "무슨 동물부터 보고 싶어?", "ak": "코끼리요!"}, {"q": "Which animal is the biggest?", "a": "Probably the elephant.", "qk": "어떤 동물이 제일 커?", "ak": "아마 코끼리요."}, {"q": "Why do you like monkeys?", "a": "They're funny.", "qk": "원숭이는 왜 좋아해?", "ak": "웃겨서요."}]}, {"topic": "수족관", "level": "기본", "words": [], "pairs": [{"q": "Which fish do you like?", "a": "That blue one.", "qk": "무슨 물고기 좋아해?", "ak": "저 파란 거요."}, {"q": "Is that a shark?", "a": "Whoa, yeah, it is!", "qk": "저거 상어야?", "ak": "우와, 응, 맞아!"}, {"q": "Do fish sleep?", "a": "I think so.", "qk": "물고기도 자?", "ak": "그런 것 같아요."}]}, {"topic": "박물관", "level": "기본", "words": [], "pairs": [{"q": "What's this?", "a": "It's an old painting.", "qk": "이게 뭐야?", "ak": "오래된 그림이에요."}, {"q": "Can we take pictures here?", "a": "No, I don't think so.", "qk": "여기서 사진 찍어도 돼?", "ak": "아니, 안 되는 것 같아."}, {"q": "Which room do you like best?", "a": "The dinosaur room, for sure.", "qk": "어느 전시실이 제일 좋아?", "ak": "당연히 공룡 전시실이요."}]}, {"topic": "차 안에서", "level": "기본", "words": [], "pairs": [{"q": "Are we there yet?", "a": "Not yet, but we're close.", "qk": "다 왔어?", "ak": "아직, 그래도 거의 다 왔어요."}, {"q": "How much longer?", "a": "About twenty minutes.", "qk": "얼마나 더 가야 해?", "ak": "20분 정도요."}, {"q": "Can I open the window?", "a": "A little bit.", "qk": "창문 열어도 돼?", "ak": "조금만."}]}, {"topic": "버스", "level": "기본", "words": [], "pairs": [{"q": "Which bus are we taking?", "a": "The number ten.", "qk": "몇 번 버스 타?", "ak": "10번이요."}, {"q": "Is this our stop?", "a": "No, the next one.", "qk": "여기가 내릴 곳이야?", "ak": "아니, 다음이야."}, {"q": "Can I sit here?", "a": "Sure, go ahead.", "qk": "여기 앉아도 돼요?", "ak": "응, 앉아."}]}, {"topic": "지하철", "level": "기본", "words": [], "pairs": [{"q": "Which line do we need?", "a": "Line two.", "qk": "몇 호선 타야 해?", "ak": "2호선이요."}, {"q": "Where do we get off?", "a": "At City Hall.", "qk": "어디서 내려?", "ak": "시청에서요."}, {"q": "Is it crowded?", "a": "Yeah, pretty crowded.", "qk": "붐벼?", "ak": "응, 꽤 붐벼."}]}, {"topic": "길 찾기", "level": "기본", "words": [], "pairs": [{"q": "Where's the bathroom?", "a": "It's on the left.", "qk": "화장실 어디예요?", "ak": "왼쪽에 있어요."}, {"q": "How do I get there?", "a": "Go straight, then turn right.", "qk": "어떻게 가요?", "ak": "쭉 가다가 오른쪽으로 도세요."}, {"q": "Is it far?", "a": "Nope, it's really close.", "qk": "멀어요?", "ak": "아니요, 정말 가까워요."}]}, {"topic": "사진 찍기", "level": "기본", "words": [], "pairs": [{"q": "Can you take my picture?", "a": "Sure. Stand over there.", "qk": "사진 찍어줄래?", "ak": "응. 저쪽에 서."}, {"q": "Where should I look?", "a": "Right at the camera.", "qk": "어디를 봐야 해?", "ak": "카메라를 바로 봐."}, {"q": "How did it turn out?", "a": "It looks great!", "qk": "사진 어떻게 나왔어?", "ak": "잘 나왔어!"}]}, {"topic": "주말 계획", "level": "기본", "words": [], "pairs": [{"q": "What do you want to do this weekend?", "a": "I kinda want to go to the park.", "qk": "이번 주말 뭐 하고 싶어?", "ak": "공원 가고 싶어요."}, {"q": "Who should we go with?", "a": "Let's go with Mom and Dad.", "qk": "누구랑 갈까?", "ak": "엄마 아빠랑 가요."}, {"q": "What should we bring?", "a": "Snacks and water, for sure.", "qk": "뭐 가져갈까?", "ak": "간식이랑 물은 꼭 가져가요."}]}, {"topic": "생일", "level": "기본", "words": [], "pairs": [{"q": "When's your birthday?", "a": "It's in May.", "qk": "생일 언제야?", "ak": "5월이에요."}, {"q": "What do you want for your birthday?", "a": "Maybe a new book.", "qk": "생일 선물 뭐 받고 싶어?", "ak": "새 책이면 좋겠어요."}, {"q": "Who's coming to your party?", "a": "A few of my friends.", "qk": "파티에 누가 와?", "ak": "친구 몇 명이요."}]}, {"topic": "DAY 50 복습", "level": "기본", "words": [], "pairs": [{"q": "What did you do today?", "a": "I went to school and hung out with my friends.", "qk": "오늘 뭐 했어?", "ak": "학교 가고 친구들이랑 놀았어요."}, {"q": "What do you feel like doing tomorrow?", "a": "I feel like drawing something new.", "qk": "내일 뭐 하고 싶어?", "ak": "새로운 그림 그리고 싶어요."}, {"q": "How are you feeling now?", "a": "Tired, but good.", "qk": "지금 기분 어때?", "ak": "피곤하지만 좋아요."}]}, {"topic": "내일 계획", "level": "확장 1", "words": ["plan 계획하다", "improve 향상시키다"], "pairs": [{"q": "What are you planning to do tomorrow?", "a": "I'm gonna practice swimming.", "qk": "내일 뭐 할 계획이야?", "ak": "수영 연습할 거예요."}, {"q": "Why do you want to practice?", "a": "I just want to get better.", "qk": "왜 연습하고 싶어?", "ak": "그냥 더 잘하고 싶어요."}, {"q": "When are you starting?", "a": "Probably after lunch.", "qk": "언제 시작할 거야?", "ak": "아마 점심 먹고요."}]}, {"topic": "선택하기", "level": "확장 1", "words": ["prefer 더 좋아하다", "imagination 상상력"], "pairs": [{"q": "Which activity do you like better?", "a": "I like drawing more than dancing.", "qk": "어떤 활동을 더 좋아해?", "ak": "춤보다 그림 그리기를 더 좋아해요."}, {"q": "Why do you like it more?", "a": "I can use my imagination.", "qk": "왜 그걸 더 좋아해?", "ak": "상상력을 쓸 수 있어서요."}, {"q": "Want to try something new?", "a": "Sure. Maybe pottery.", "qk": "새로운 거 해볼래?", "ak": "좋아요. 도자기 같은 거요."}]}, {"topic": "학교에서 있었던 일", "level": "확장 1", "words": ["experiment 실험", "discover 발견하다"], "pairs": [{"q": "What happened at school today?", "a": "We did a science experiment.", "qk": "오늘 학교에서 무슨 일이 있었어?", "ak": "과학 실험을 했어요."}, {"q": "Was it interesting?", "a": "Yeah, it was actually really cool.", "qk": "재미있었어?", "ak": "응, 생각보다 정말 신기했어요."}, {"q": "What did you find out?", "a": "We found out that oil floats on water.", "qk": "뭘 알게 됐어?", "ak": "기름이 물 위에 뜬다는 걸 알게 됐어요."}]}, {"topic": "약속", "level": "확장 1", "words": ["arrive 도착하다", "prepare 준비하다"], "pairs": [{"q": "Do you remember our plan?", "a": "Yep. We're seeing Grandma tomorrow.", "qk": "우리 계획 기억해?", "ak": "응. 내일 할머니 만나러 가요."}, {"q": "What time should we get there?", "a": "Before noon, I think.", "qk": "몇 시까지 가야 해?", "ak": "정오 전이었던 것 같아요."}, {"q": "What should we bring?", "a": "Maybe a little gift.", "qk": "뭘 가져갈까?", "ak": "작은 선물이 좋을 것 같아요."}]}, {"topic": "문제 해결", "level": "확장 1", "words": ["problem 문제", "check 확인하다"], "pairs": [{"q": "What's the problem?", "a": "I can't find my notebook anywhere.", "qk": "무슨 문제야?", "ak": "공책을 아무리 찾아도 없어요."}, {"q": "Where did you have it last?", "a": "I had it in class.", "qk": "마지막으로 어디서 봤어?", "ak": "교실에서요."}, {"q": "What should we do first?", "a": "Let's check my backpack again.", "qk": "먼저 뭘 해볼까?", "ak": "가방을 다시 찾아봐요."}]}, {"topic": "설명하기", "level": "확장 1", "words": ["describe 묘사하다", "comfortable 편안한"], "pairs": [{"q": "Can you describe your new bag?", "a": "It's small, light, and purple.", "qk": "새 가방을 설명해볼래?", "ak": "작고 가볍고 보라색이에요."}, {"q": "What's special about it?", "a": "It has a bunch of useful pockets.", "qk": "뭐가 특별해?", "ak": "쓸모 있는 주머니가 많아요."}, {"q": "Why do you like it?", "a": "It's really easy to carry.", "qk": "왜 마음에 들어?", "ak": "들고 다니기 정말 편해요."}]}, {"topic": "시간 관리", "level": "확장 1", "words": ["finish 끝내다", "relax 쉬다"], "pairs": [{"q": "What do you need to finish today?", "a": "I still have to finish my homework.", "qk": "오늘 뭘 끝내야 해?", "ak": "아직 숙제를 끝내야 해요."}, {"q": "How long will that take?", "a": "Maybe thirty minutes.", "qk": "얼마나 걸릴 것 같아?", "ak": "30분 정도요."}, {"q": "What are you doing after that?", "a": "I'm just gonna relax and read.", "qk": "그다음엔 뭐 할 거야?", "ak": "그냥 쉬면서 책 읽을 거예요."}]}, {"topic": "기분의 이유", "level": "확장 1", "words": ["look forward to 기대하다", "nervous 긴장한"], "pairs": [{"q": "Why do you look so excited?", "a": "We're going on a trip tomorrow!", "qk": "왜 그렇게 신나 보여?", "ak": "내일 여행 가요!"}, {"q": "What are you looking forward to most?", "a": "Definitely the hotel pool.", "qk": "뭐가 제일 기대돼?", "ak": "당연히 호텔 수영장이요."}, {"q": "Are you nervous about anything?", "a": "A little, but mostly I'm excited.", "qk": "긴장되는 것도 있어?", "ak": "조금요, 그래도 대부분 신나요."}]}, {"topic": "취미 발전", "level": "확장 1", "words": ["often 자주", "difficult 어려운"], "pairs": [{"q": "How often do you practice piano?", "a": "About three times a week.", "qk": "피아노 얼마나 자주 연습해?", "ak": "일주일에 세 번 정도요."}, {"q": "What's the hardest part for you?", "a": "Playing fast is pretty hard.", "qk": "어떤 부분이 제일 어려워?", "ak": "빠르게 치는 게 꽤 어려워요."}, {"q": "How can you get better at it?", "a": "I can start slow and speed up later.", "qk": "어떻게 더 잘할 수 있을까?", "ak": "천천히 시작해서 나중에 속도를 올리면 돼요."}]}, {"topic": "DAY 60 대화", "level": "확장 1", "words": ["interesting 흥미로운", "sunlight 햇빛"], "pairs": [{"q": "What was the most interesting thing today?", "a": "Probably the science lesson.", "qk": "오늘 가장 흥미로웠던 건 뭐야?", "ak": "아마 과학 수업이요."}, {"q": "What did you learn from it?", "a": "I learned how plants use sunlight.", "qk": "거기서 뭘 배웠어?", "ak": "식물이 햇빛을 사용하는 법을 배웠어요."}, {"q": "Do you want to learn more about it?", "a": "Yeah, especially about how plants grow.", "qk": "더 배우고 싶어?", "ak": "응, 특히 식물이 어떻게 자라는지 더 알고 싶어요."}]}, {"topic": "여행 준비", "level": "확장 2", "words": ["pack 짐을 싸다", "important 중요한", "forget 잊다"], "pairs": [{"q": "Did you pack everything you need?", "a": "Almost. I still need my toothbrush.", "qk": "필요한 거 다 챙겼어?", "ak": "거의요. 칫솔이 아직 필요해요."}, {"q": "What should we pack if it rains?", "a": "An umbrella and a light jacket.", "qk": "비 오면 뭘 챙겨야 해?", "ak": "우산이랑 얇은 재킷이요."}, {"q": "Why should we double-check?", "a": "So we don't forget anything.", "qk": "왜 다시 확인해야 해?", "ak": "아무것도 안 잊어버리려고요."}]}, {"topic": "공항", "level": "확장 2", "words": ["boarding 탑승", "gate 탑승구"], "pairs": [{"q": "Where do we check in?", "a": "Over there, I think.", "qk": "어디서 체크인해?", "ak": "저쪽인 것 같아요."}, {"q": "How long until boarding?", "a": "We've got about an hour.", "qk": "탑승까지 얼마나 남았어?", "ak": "한 시간 정도 남았어요."}, {"q": "What should we do while we wait?", "a": "Let's find our gate first.", "qk": "기다리는 동안 뭘 할까?", "ak": "먼저 탑승구부터 찾아요."}]}, {"topic": "호텔", "level": "확장 2", "words": ["reserve 예약하다", "view 전망"], "pairs": [{"q": "Do we have a reservation?", "a": "Yep, for two nights.", "qk": "우리 예약했어?", "ak": "응, 이틀이요."}, {"q": "Could we get another towel?", "a": "Sure. We'll bring one up.", "qk": "수건 하나 더 받을 수 있을까요?", "ak": "물론이죠. 가져다드릴게요."}, {"q": "What do you like about this room?", "a": "The view is awesome.", "qk": "이 방의 어떤 점이 좋아?", "ak": "전망이 정말 좋아요."}]}, {"topic": "관광", "level": "확장 2", "words": ["curious 궁금한", "information 정보"], "pairs": [{"q": "Where do you want to go first?", "a": "I'd like to check out the museum.", "qk": "어디부터 가보고 싶어?", "ak": "박물관부터 가보고 싶어요."}, {"q": "What are you curious about?", "a": "Those old buildings.", "qk": "뭐가 궁금해?", "ak": "저 오래된 건물들이요."}, {"q": "How can we learn more about them?", "a": "Let's read the signs.", "qk": "어떻게 더 알아볼 수 있을까?", "ak": "안내판을 읽어봐요."}]}, {"topic": "길을 잃었을 때", "level": "확장 2", "words": ["direction 방향/길 안내", "officer 경찰관"], "pairs": [{"q": "Do you know where we are?", "a": "Nope. I think we're lost.", "qk": "우리 어디 있는지 알아?", "ak": "아니요. 길을 잃은 것 같아요."}, {"q": "Who can we ask for directions?", "a": "Maybe that police officer.", "qk": "누구한테 길을 물어볼까?", "ak": "저 경찰관한테 물어보면 될 것 같아요."}, {"q": "What should we tell them?", "a": "The name of our hotel.", "qk": "뭘 말해야 해?", "ak": "호텔 이름이요."}]}, {"topic": "여행 경험", "level": "확장 2", "words": ["surprise 놀라게 하다", "explore 탐험하다"], "pairs": [{"q": "What surprised you most on this trip?", "a": "The aquarium. It was huge.", "qk": "이번 여행에서 뭐가 제일 놀라웠어?", "ak": "수족관이요. 엄청 컸어요."}, {"q": "What felt different from home?", "a": "The streets were way quieter.", "qk": "집과 뭐가 달랐어?", "ak": "거리가 훨씬 조용했어요."}, {"q": "What would you do next time?", "a": "I'd explore another neighborhood.", "qk": "다음엔 뭘 해보고 싶어?", "ak": "다른 동네도 둘러볼래요."}]}, {"topic": "책 이야기", "level": "확장 2", "words": ["mainly 주로", "recommend 추천하다"], "pairs": [{"q": "What's this story mostly about?", "a": "A girl who finds a hidden door.", "qk": "이 이야기는 주로 무슨 내용이야?", "ak": "숨겨진 문을 찾는 소녀 이야기예요."}, {"q": "Which character do you understand best?", "a": "Probably the girl.", "qk": "어떤 등장인물이 가장 이해돼?", "ak": "아마 그 소녀요."}, {"q": "Would you recommend this book?", "a": "Yeah. It's really exciting.", "qk": "이 책 추천할래?", "ak": "응, 정말 흥미진진해요."}]}, {"topic": "과학 호기심", "level": "확장 2", "words": ["compare 비교하다", "weak 약한"], "pairs": [{"q": "Why do plants need sunlight?", "a": "They use it to make food.", "qk": "식물은 왜 햇빛이 필요해?", "ak": "양분을 만드는 데 써요."}, {"q": "What happens if a plant gets no water?", "a": "It gets weak and dries out.", "qk": "식물이 물을 못 받으면 어떻게 돼?", "ak": "약해지고 말라요."}, {"q": "How could we test that?", "a": "We could compare two plants.", "qk": "그걸 어떻게 실험해볼까?", "ak": "식물 두 개를 비교해볼 수 있어요."}]}, {"topic": "친구와 의견", "level": "확장 2", "words": ["agree 동의하다", "carefully 신중하게"], "pairs": [{"q": "Do you agree with your friend?", "a": "Kind of. I agree with part of it.", "qk": "친구 의견에 동의해?", "ak": "어느 정도요. 일부는 동의해요."}, {"q": "What would you do differently?", "a": "I'd choose a smaller project.", "qk": "너라면 뭐를 다르게 할 거야?", "ak": "더 작은 프로젝트를 고를래요."}, {"q": "Could both ideas work?", "a": "Yeah, if we plan it well.", "qk": "두 생각 모두 가능할까?", "ak": "응, 잘 계획하면요."}]}, {"topic": "DAY 70 대화", "level": "확장 2", "words": ["goal 목표", "confidently 자신 있게"], "pairs": [{"q": "What's something you've gotten better at lately?", "a": "My reading speed.", "qk": "최근에 뭐가 더 좋아졌어?", "ak": "읽는 속도요."}, {"q": "How did you improve?", "a": "I practiced a little every day.", "qk": "어떻게 좋아졌어?", "ak": "매일 조금씩 연습했어요."}, {"q": "What's your next goal?", "a": "I want to speak English more confidently.", "qk": "다음 목표는 뭐야?", "ak": "영어를 더 자신 있게 말하고 싶어요."}]}, {"topic": "계획 세우기", "level": "확장 3", "words": ["realistic 현실적인", "progress 진행"], "pairs": [{"q": "What's your plan for this week?", "a": "I want to finish two books.", "qk": "이번 주 계획이 뭐야?", "ak": "책 두 권 다 읽고 싶어요."}, {"q": "Do you think that's realistic?", "a": "Yeah, if I read a little every day.", "qk": "그 목표가 현실적이라고 생각해?", "ak": "응, 매일 조금씩 읽으면요."}, {"q": "How will you track your progress?", "a": "I'll mark it on my calendar.", "qk": "진행 상황을 어떻게 확인할 거야?", "ak": "달력에 표시할 거예요."}]}, {"topic": "선택의 이유", "level": "확장 3", "words": ["expect 예상하다", "topic 주제"], "pairs": [{"q": "Why did you pick this book?", "a": "The topic looked interesting.", "qk": "왜 이 책 골랐어?", "ak": "주제가 흥미로워 보였어요."}, {"q": "What do you expect to learn?", "a": "Hopefully something about space travel.", "qk": "뭘 배울 것 같아?", "ak": "우주여행에 대해 뭔가 배울 것 같아요."}, {"q": "What if it's too hard?", "a": "I'll slow down or ask for help.", "qk": "너무 어려우면 어떻게 할 거야?", "ak": "천천히 읽거나 도움을 요청할래요."}]}, {"topic": "협력", "level": "확장 3", "words": ["responsibility 책임", "share 공유하다"], "pairs": [{"q": "How should we split up the work?", "a": "Let's each take one part.", "qk": "일을 어떻게 나눌까?", "ak": "각자 한 부분씩 맡아요."}, {"q": "What are you in charge of?", "a": "I'm doing the poster.", "qk": "넌 뭘 맡았어?", "ak": "포스터 맡았어요."}, {"q": "How can we help each other?", "a": "We can share ideas and check each other's work.", "qk": "서로 어떻게 도울 수 있을까?", "ak": "아이디어를 나누고 서로 확인해줄 수 있어요."}]}, {"topic": "실수", "level": "확장 3", "words": ["mistake 실수", "disappointed 실망한"], "pairs": [{"q": "What happened to your project?", "a": "I messed up and had to start over.", "qk": "프로젝트에 무슨 일이 있었어?", "ak": "실수해서 다시 시작해야 했어요."}, {"q": "How did you feel?", "a": "Pretty disappointed at first.", "qk": "기분이 어땠어?", "ak": "처음엔 꽤 실망했어요."}, {"q": "What did you learn from it?", "a": "To double-check my work.", "qk": "거기서 뭘 배웠어?", "ak": "작업을 다시 확인해야 한다는 걸요."}]}, {"topic": "환경", "level": "확장 3", "words": ["environment 환경", "reduce 줄이다"], "pairs": [{"q": "Why should we save water?", "a": "Because everyone needs clean water.", "qk": "왜 물을 아껴야 해?", "ak": "모두에게 깨끗한 물이 필요해서요."}, {"q": "What can we do at home?", "a": "Turn off the water while we brush.", "qk": "집에서 뭘 할 수 있어?", "ak": "양치할 때 물을 잠글 수 있어요."}, {"q": "How does that help?", "a": "It cuts down on wasted water.", "qk": "그게 어떻게 도움이 돼?", "ak": "낭비되는 물을 줄여줘요."}]}, {"topic": "감정 이해", "level": "확장 3", "words": ["respond 반응하다", "upset 속상한"], "pairs": [{"q": "Why was your friend upset?", "a": "She lost something important.", "qk": "친구가 왜 속상했어?", "ak": "중요한 걸 잃어버렸어요."}, {"q": "What did you do?", "a": "I listened and tried to help.", "qk": "넌 어떻게 했어?", "ak": "이야기를 들어주고 도와주려고 했어요."}, {"q": "What might make her feel better?", "a": "Finding it would definitely help.", "qk": "어떻게 하면 기분이 나아질까?", "ak": "그걸 찾으면 확실히 나아질 거예요."}]}, {"topic": "비교", "level": "확장 3", "words": ["common 공통의", "different 다른"], "pairs": [{"q": "How are these animals different?", "a": "One lives on land, and the other lives in water.", "qk": "이 두 동물은 어떻게 달라?", "ak": "하나는 땅에, 다른 하나는 물에 살아요."}, {"q": "What do they have in common?", "a": "They both need food and water.", "qk": "공통점은 뭐야?", "ak": "둘 다 음식과 물이 필요해요."}, {"q": "Which one do you find more interesting?", "a": "The dolphin, definitely.", "qk": "어느 쪽이 더 흥미로워?", "ak": "확실히 돌고래요."}]}, {"topic": "이야기 만들기", "level": "확장 3", "words": ["begin 시작하다", "face 직면하다"], "pairs": [{"q": "How does your story start?", "a": "A girl finds a weird map.", "qk": "네 이야기는 어떻게 시작해?", "ak": "한 소녀가 이상한 지도를 찾아요."}, {"q": "What problem does she run into?", "a": "She gets lost in a forest.", "qk": "어떤 문제를 만나?", "ak": "숲에서 길을 잃어요."}, {"q": "How does it end?", "a": "She follows the map and makes it home.", "qk": "어떻게 끝나?", "ak": "지도를 따라 집에 돌아가요."}]}, {"topic": "정보 찾기", "level": "확장 3", "words": ["reliable 믿을 만한", "source 자료/출처"], "pairs": [{"q": "Where can we find reliable information?", "a": "A book or a trusted website.", "qk": "믿을 만한 정보는 어디서 찾을 수 있어?", "ak": "책이나 믿을 수 있는 웹사이트요."}, {"q": "How can we check if it's right?", "a": "Compare it with another source.", "qk": "맞는 정보인지 어떻게 확인해?", "ak": "다른 자료와 비교해봐요."}, {"q": "Why does that matter?", "a": "Because not everything online is true.", "qk": "왜 그게 중요해?", "ak": "인터넷의 모든 정보가 사실은 아니니까요."}]}, {"topic": "DAY 80 대화", "level": "확장 3", "words": ["challenge 도전/어려움", "audience 청중"], "pairs": [{"q": "What was hard for you this week?", "a": "Speaking in front of the class.", "qk": "이번 주에 뭐가 어려웠어?", "ak": "반 앞에서 말하는 거요."}, {"q": "How did you handle it?", "a": "I practiced a bunch of times.", "qk": "어떻게 해결했어?", "ak": "여러 번 연습했어요."}, {"q": "What will you do next time?", "a": "I'll slow down and look at the audience.", "qk": "다음엔 어떻게 할 거야?", "ak": "천천히 말하고 사람들을 볼 거예요."}]}, {"topic": "꿈과 목표", "level": "확장 4", "words": ["skill 능력", "creativity 창의력", "communication 의사소통"], "pairs": [{"q": "What do you want to be when you grow up?", "a": "Maybe a designer.", "qk": "커서 뭐가 되고 싶어?", "ak": "디자이너가 될지도 몰라요."}, {"q": "What skills would you need?", "a": "Creativity and good communication.", "qk": "어떤 능력이 필요할까?", "ak": "창의력과 좋은 의사소통 능력이요."}, {"q": "How could you start now?", "a": "I could draw more and keep learning new things.", "qk": "지금부터 뭘 할 수 있을까?", "ak": "그림을 더 그리고 계속 새로운 걸 배울 수 있어요."}]}, {"topic": "발표", "level": "확장 4", "words": ["organize 정리하다", "presentation 발표"], "pairs": [{"q": "What's your presentation about?", "a": "Animals that live in the ocean.", "qk": "발표 주제가 뭐야?", "ak": "바다에 사는 동물들이요."}, {"q": "How did you organize it?", "a": "I split it into three parts.", "qk": "어떻게 정리했어?", "ak": "세 부분으로 나눴어요."}, {"q": "What will help you speak clearly?", "a": "Practicing with my notes.", "qk": "또렷하게 말하는 데 뭐가 도움이 될까?", "ak": "메모를 보며 연습하는 거요."}]}, {"topic": "책의 메시지", "level": "확장 4", "words": ["meaningful 의미 있는", "opinion 의견", "failure 실패"], "pairs": [{"q": "What do you think the story is trying to say?", "a": "That courage can grow with practice.", "qk": "이 이야기가 무슨 말을 하려는 것 같아?", "ak": "용기는 연습하면서 자랄 수 있다는 거요."}, {"q": "Which scene meant the most to you?", "a": "The last one.", "qk": "어떤 장면이 가장 의미 있었어?", "ak": "마지막 장면이요."}, {"q": "Did the story change your mind about anything?", "a": "Yeah, about making mistakes.", "qk": "이야기가 네 생각을 바꾼 게 있어?", "ak": "응, 실수에 대한 생각이요."}]}, {"topic": "실험 결과", "level": "확장 4", "words": ["result 결과", "probably 아마", "measure 측정하다"], "pairs": [{"q": "What result did you get?", "a": "The plant by the window grew faster.", "qk": "어떤 결과가 나왔어?", "ak": "창가의 식물이 더 빨리 자랐어요."}, {"q": "Why do you think that happened?", "a": "It probably got more sunlight.", "qk": "왜 그런 것 같아?", "ak": "아마 햇빛을 더 많이 받아서요."}, {"q": "What would you change next time?", "a": "I'd measure the water more carefully.", "qk": "다음엔 뭘 바꿀 거야?", "ak": "물의 양을 더 정확히 잴래요."}]}, {"topic": "갈등 해결", "level": "확장 4", "words": ["disagree 의견이 다르다", "solution 해결책", "fair 공평한"], "pairs": [{"q": "Why did you and your friend disagree?", "a": "We wanted to play different games.", "qk": "친구와 왜 의견이 달랐어?", "ak": "서로 다른 게임을 하고 싶었어요."}, {"q": "How did you work it out?", "a": "We took turns choosing.", "qk": "어떻게 해결했어?", "ak": "번갈아 고르기로 했어요."}, {"q": "Did that feel fair?", "a": "Yeah, we both got a turn.", "qk": "공평하다고 느꼈어?", "ak": "응, 둘 다 차례가 있었어요."}]}, {"topic": "건강한 습관", "level": "확장 4", "words": ["recover 회복하다", "habit 습관"], "pairs": [{"q": "Why is sleep important for kids?", "a": "It helps our bodies and brains recharge.", "qk": "아이들에게 잠이 왜 중요해?", "ak": "몸과 뇌가 다시 힘을 얻는 데 도움이 돼요."}, {"q": "What helps you sleep better?", "a": "Reading quietly before bed.", "qk": "잠을 잘 자는 데 뭐가 도움이 돼?", "ak": "자기 전에 조용히 책 읽는 거요."}, {"q": "What can make it harder to sleep?", "a": "Looking at a bright screen too late.", "qk": "뭐 때문에 잠들기 어려울 수 있어?", "ak": "늦게 밝은 화면을 보는 거요."}]}, {"topic": "새로운 장소", "level": "확장 4", "words": ["impression 인상", "impress 인상을 주다"], "pairs": [{"q": "What was your first impression of the city?", "a": "Busy, but really exciting.", "qk": "그 도시의 첫인상은 어땠어?", "ak": "바쁘지만 정말 신났어요."}, {"q": "What place impressed you the most?", "a": "The huge library.", "qk": "어떤 장소가 제일 인상적이었어?", "ak": "큰 도서관이요."}, {"q": "Would you go back someday?", "a": "Definitely. There's more I want to see.", "qk": "언젠가 다시 갈래?", "ak": "당연하죠. 더 보고 싶은 게 있어요."}]}, {"topic": "돈과 선택", "level": "확장 4", "words": ["save 저축하다", "worth 가치가 있는"], "pairs": [{"q": "You have ten dollars. What would you buy?", "a": "A book, and I'd save the rest.", "qk": "10달러가 있다면 뭘 살 거야?", "ak": "책을 사고 나머지는 저축할래요."}, {"q": "Why save some of it?", "a": "I might need it later.", "qk": "왜 일부를 저축해?", "ak": "나중에 필요할 수도 있으니까요."}, {"q": "How do you know if something is worth buying?", "a": "I think about how much I'll actually use it.", "qk": "살 가치가 있는지 어떻게 알아?", "ak": "실제로 얼마나 쓸지 생각해요."}]}, {"topic": "온라인 정보", "level": "확장 4", "words": ["misleading 오해를 부르는", "unsure 확신이 없는"], "pairs": [{"q": "Why shouldn't we believe everything online?", "a": "Because some stuff online is just wrong.", "qk": "왜 인터넷의 모든 걸 믿으면 안 돼?", "ak": "인터넷에는 그냥 틀린 정보도 있으니까요."}, {"q": "What should we check first?", "a": "Who made it and where it came from.", "qk": "먼저 뭘 확인해야 해?", "ak": "누가 만들었고 어디서 나온 건지요."}, {"q": "What if we're not sure?", "a": "Ask an adult or check another source.", "qk": "확실하지 않으면?", "ak": "어른에게 묻거나 다른 자료를 확인해요."}]}, {"topic": "DAY 90 대화", "level": "확장 4", "words": ["clearly 분명하게", "compare 비교하다"], "pairs": [{"q": "What's easier for you now?", "a": "Explaining my reasons is easier now.", "qk": "이제 뭐가 더 쉬워졌어?", "ak": "이유를 설명하는 게 더 쉬워졌어요."}, {"q": "What's still hard?", "a": "Comparing two ideas is still kinda hard.", "qk": "아직 뭐가 어려워?", "ak": "두 생각을 비교하는 건 아직 좀 어려워요."}, {"q": "How will you practice?", "a": "I'll answer one longer question every day.", "qk": "어떻게 연습할 거야?", "ak": "매일 긴 질문 하나씩 답할 거예요."}]}, {"topic": "오늘 돌아보기", "level": "확장 5", "words": ["wish ~하면 좋겠다", "remember 기억하다"], "pairs": [{"q": "What was the best part of your day, and why?", "a": "Hanging out with my friends, because we laughed a lot.", "qk": "오늘 가장 좋았던 일은 뭐고 왜 그랬어?", "ak": "친구들과 많이 웃어서 같이 논 게 제일 좋았어요."}, {"q": "Anything you wish you'd done differently?", "a": "I wish I'd finished my homework earlier.", "qk": "다르게 했으면 좋았을 일이 있어?", "ak": "숙제를 더 일찍 끝냈으면 좋았을 것 같아요."}, {"q": "What do you think you'll remember about today?", "a": "Probably the funny story my friend told me.", "qk": "오늘 뭘 기억할 것 같아?", "ak": "아마 친구가 해준 웃긴 이야기요."}]}, {"topic": "감사", "level": "확장 5", "words": ["grateful 감사하는", "show 표현하다"], "pairs": [{"q": "What are you grateful for today?", "a": "I'm grateful my family helped me.", "qk": "오늘 무엇에 감사해?", "ak": "가족이 도와준 것에 감사해요."}, {"q": "How did they help?", "a": "My mom helped me with a hard question.", "qk": "어떻게 도와줬어?", "ak": "엄마가 어려운 문제를 도와줬어요."}, {"q": "How could you say thanks?", "a": "I could help her with something, too.", "qk": "감사를 어떻게 표현할 수 있을까?", "ak": "저도 뭔가 도와드릴 수 있어요."}]}, {"topic": "도전", "level": "확장 5", "words": ["challenging 어려운", "prepare 준비하다"], "pairs": [{"q": "What was challenging today?", "a": "Speaking in front of the class.", "qk": "오늘 뭐가 어려웠어?", "ak": "반 앞에서 말하는 거요."}, {"q": "What helped you keep going?", "a": "I remembered how much I'd practiced.", "qk": "계속 하게 만든 건 뭐야?", "ak": "얼마나 많이 연습했는지 떠올렸어요."}, {"q": "What did you learn about yourself?", "a": "That I can do hard things if I prepare.", "qk": "너 자신에 대해 뭘 알게 됐어?", "ak": "준비하면 어려운 것도 할 수 있다는 거요."}]}, {"topic": "상상하기", "level": "확장 5", "words": ["any 어떤 ~라도", "would ~할 것이다"], "pairs": [{"q": "If you could go anywhere in the world, where would you go?", "a": "London. I really want to see Big Ben.", "qk": "세계 어디든 갈 수 있다면 어디 갈 거야?", "ak": "런던이요. 빅벤을 정말 보고 싶어요."}, {"q": "What would you do first?", "a": "Walk around and take a bunch of pictures.", "qk": "먼저 뭘 할 거야?", "ak": "걸어 다니면서 사진을 많이 찍을래요."}, {"q": "Who would you take with you?", "a": "My family, for sure.", "qk": "누구랑 갈 거야?", "ak": "당연히 가족이요."}]}, {"topic": "미래의 나", "level": "확장 5", "words": ["step 단계/실천", "notice 알아차리다"], "pairs": [{"q": "What skill do you want to get better at this year?", "a": "Speaking English.", "qk": "올해 어떤 능력을 더 키우고 싶어?", "ak": "영어 말하기요."}, {"q": "What's one small thing you can do every day?", "a": "Talk in English for five minutes before bed.", "qk": "매일 할 수 있는 작은 실천은 뭐야?", "ak": "자기 전에 5분 영어로 말하는 거요."}, {"q": "How will you know you're improving?", "a": "I'll answer faster and use longer sentences.", "qk": "실력이 늘고 있는지 어떻게 알까?", "ak": "더 빨리 답하고 더 긴 문장을 쓰게 될 거예요."}]}, {"topic": "좋은 친구", "level": "확장 5", "words": ["care 배려하다", "kindly 친절하게"], "pairs": [{"q": "What makes someone a good friend?", "a": "Someone who listens, shares, and cares.", "qk": "어떤 사람이 좋은 친구일까?", "ak": "잘 들어주고 나누고 배려하는 사람이요."}, {"q": "What should you do if a friend makes a mistake?", "a": "Listen first and talk kindly.", "qk": "친구가 실수하면 어떻게 해야 할까?", "ak": "먼저 들어주고 친절하게 말해야 해요."}, {"q": "How can friends solve a problem together?", "a": "Talk it out and find something that feels fair.", "qk": "친구끼리 문제를 어떻게 해결할까?", "ak": "이야기해서 서로 공평하다고 느끼는 방법을 찾아요."}]}, {"topic": "배운 것 설명하기", "level": "확장 5", "words": ["energy 에너지", "wonder 궁금해하다"], "pairs": [{"q": "Tell me something interesting you learned this week.", "a": "Plants can make food using sunlight.", "qk": "이번 주에 배운 흥미로운 걸 말해봐.", "ak": "식물은 햇빛을 이용해 양분을 만들 수 있어요."}, {"q": "Why was that interesting to you?", "a": "I never really thought about how plants get energy.", "qk": "왜 흥미로웠어?", "ak": "식물이 어떻게 에너지를 얻는지 생각해본 적이 별로 없어서요."}, {"q": "What are you still curious about?", "a": "How plants grow in really dark places.", "qk": "아직 뭐가 궁금해?", "ak": "아주 어두운 곳에서 식물이 어떻게 자라는지요."}]}, {"topic": "의견 말하기", "level": "확장 5", "words": ["creative 창의적인", "responsibility 책임"], "pairs": [{"q": "Do you think kids should have more free time?", "a": "Yeah. We need time to relax and be creative.", "qk": "아이들에게 자유 시간이 더 필요하다고 생각해?", "ak": "응. 쉬고 창의적으로 생각할 시간이 필요해요."}, {"q": "What's a good way to use free time?", "a": "Read, draw, play outside—stuff like that.", "qk": "자유 시간을 잘 쓰는 방법은 뭐야?", "ak": "책 읽고 그림 그리고 밖에서 노는 것 같은 거요."}, {"q": "Can too much free time be a problem?", "a": "Sure, if we forget what we need to do.", "qk": "자유 시간이 너무 많으면 문제가 될 수 있어?", "ak": "그럼요, 해야 할 일을 잊으면요."}]}, {"topic": "영어 실력 돌아보기", "level": "확장 5", "words": ["explain 설명하다", "conversation 대화"], "pairs": [{"q": "What kind of English questions feel easier now?", "a": "Questions about my day are way easier.", "qk": "이제 어떤 영어 질문이 쉬워졌어?", "ak": "제 하루에 대한 질문이 훨씬 쉬워졌어요."}, {"q": "What do you do when you don't know a word?", "a": "I try to explain it another way.", "qk": "모르는 단어가 나오면 어떻게 해?", "ak": "다른 방식으로 설명해보려고 해요."}, {"q": "What do you want to practice next?", "a": "Longer conversations.", "qk": "다음엔 뭘 연습하고 싶어?", "ak": "더 긴 대화요."}]}, {"topic": "DAY 100", "level": "확장 5", "words": ["translate 번역하다", "naturally 자연스럽게"], "pairs": [{"q": "How has your English changed in one hundred days?", "a": "I can answer more questions without translating every word.", "qk": "100일 동안 영어가 어떻게 달라졌어?", "ak": "모든 단어를 번역하지 않고도 더 많은 질문에 답할 수 있어요."}, {"q": "What are you most proud of?", "a": "That I practiced a little every day.", "qk": "가장 자랑스러운 건 뭐야?", "ak": "매일 조금씩 연습한 거요."}, {"q": "What's your next English goal?", "a": "I want to sound more natural in real conversations.", "qk": "다음 영어 목표는 뭐야?", "ak": "실제 대화에서 더 자연스럽게 말하고 싶어요."}]}];
+
+let currentDay = Math.max(1, Math.min(100, Number(localStorage.getItem("currentDay")) || 1));
+let coins = Number(localStorage.getItem("coins")) || 0;
+let viewDay = currentDay;
+let hideKo = localStorage.getItem("hideKo") === "1";
+let answers = [false,false,false];
+
+function lesson(day=viewDay){ return DAYS[day-1]; }
+function esc(s){ return String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'"); }
+
+function speak(text, lang="en-US", rate=.84){
+  if(!("speechSynthesis" in window)){ alert("이 브라우저에서는 음성 재생을 지원하지 않습니다."); return; }
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text); u.lang=lang; u.rate=rate; speechSynthesis.speak(u);
+}
+
+function renderStudy(){
+  const d=lesson();
+  document.getElementById("coinCount").textContent=coins;
+  document.getElementById("mapCoins").textContent=coins;
+  document.getElementById("dayNum").textContent=`DAY ${viewDay}`;
+  document.getElementById("topic").textContent=d.topic;
+  document.getElementById("prevDay").disabled=viewDay<=1;
+  document.getElementById("nextDay").disabled=viewDay>=currentDay;
+
+  const badges=document.getElementById("badges");
+  badges.innerHTML=`<span class="badge level">${d.level}</span>${viewDay<currentDay?'<span class="badge review">복습 DAY</span>':'<span class="badge">현재 DAY</span>'}`;
+
+  const wb=document.getElementById("wordsBox");
+  if(d.words && d.words.length){
+    wb.innerHTML=`<div class="words"><b>오늘의 확장 어휘</b><div class="chips">${d.words.map(w=>`<span class="chip">${w}</span>`).join("")}</div></div>`;
+  } else wb.innerHTML="";
+
+  const list=document.getElementById("qaList");
+  list.innerHTML=d.pairs.map((p,i)=>`
+    <div class="qa-card">
+      <div class="label">QUESTION ${i+1}</div>
+      <div class="q-en">${p.q}</div>
+      <div class="ko">${p.qk}</div>
+      <div class="card-tools">
+        <button class="smallbtn" onclick="speak('${esc(p.q)}')">🔊 질문 듣기</button>
+      </div>
+      <div class="answer">
+        <div class="label">ANSWER</div>
+        <div class="a-en">${p.a}</div>
+        <div class="ko">${p.ak}</div>
+        <div class="card-tools">
+          <button class="smallbtn alt" onclick="speak('${esc(p.a)}')">🔊 답 듣기</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+
+  document.getElementById("studyWrap").classList.toggle("hideko",hideKo);
+  const t=document.getElementById("toggleKo");
+  t.classList.toggle("on",hideKo);
+  t.textContent=hideKo?"한국어 뜻 보이기":"가나다 한국어 뜻 숨기기";
+}
+
+document.getElementById("prevDay").onclick=()=>{ if(viewDay>1){viewDay--;renderStudy();scrollTo(0,0)} };
+document.getElementById("nextDay").onclick=()=>{ if(viewDay<currentDay){viewDay++;renderStudy();scrollTo(0,0)} };
+document.getElementById("toggleKo").onclick=()=>{hideKo=!hideKo;localStorage.setItem("hideKo",hideKo?"1":"0");renderStudy()};
+
+function openMap(){
+  document.getElementById("studyScreen").classList.add("hidden");
+  document.getElementById("mapScreen").classList.remove("hidden");
+  renderMap();
+  setTimeout(()=>document.getElementById("day-"+currentDay)?.scrollIntoView({behavior:"smooth",block:"center"}),120);
+}
+function backStudy(){
+  viewDay=currentDay;
+  document.getElementById("mapScreen").classList.add("hidden");
+  document.getElementById("studyScreen").classList.remove("hidden");
+  renderStudy();
+}
+document.getElementById("openMap").onclick=openMap;
+document.getElementById("backStudy").onclick=backStudy;
+
+function capyHTML(){
+ return `<div class="capy-body"><div class="capy-leg l1"></div><div class="capy-leg l2"></div></div>
+ <div class="capy-head"><div class="capy-ear e1"></div><div class="capy-ear e2"></div><div class="capy-eye"></div><div class="capy-snout"></div><div class="capy-nose"></div></div>
+ <div class="capy-name">다인이의 카피바라</div>`;
+}
+
+function renderMap(){
+  const map=document.getElementById("map");
+  map.querySelectorAll(".node,.shop,.deco,.capy").forEach(e=>e.remove());
+  const spacing=90;
+  for(let day=1;day<=100;day++){
+    const n=document.createElement("div");
+    n.id="day-"+day; n.className="node";
+    if(day%10===0)n.classList.add("big");
+    if(day<currentDay)n.classList.add("done");
+    if(day===currentDay)n.classList.add("current");
+    if(day>currentDay)n.classList.add("locked");
+    n.style.top=(day*spacing)+"px"; n.textContent=day;
+    if(day<=currentDay) n.onclick=()=>{viewDay=day;backStudy();};
+    map.appendChild(n);
+
+    if(day%10===0){
+      const s=document.createElement("div"); s.className="shop"; s.style.top=(day*spacing+11)+"px"; s.innerHTML="🏪 숲속 편의점"; map.appendChild(s);
+    }
+    if(day%3===0){
+      const d=document.createElement("div"); d.className="deco"; d.style.top=(day*spacing+26)+"px";
+      if(day%2===0){d.style.left="6%";d.textContent=day%6===0?"🌲":"🌿";}
+      else{d.style.right="6%";d.textContent=day%9===0?"🪨":"🌳";}
+      map.appendChild(d);
+    }
+  }
+  const c=document.createElement("div"); c.className="capy"; c.style.top=(currentDay*spacing-5)+"px"; c.innerHTML=capyHTML(); map.appendChild(c);
+  map.style.minHeight=(100*spacing+180)+"px";
+  document.getElementById("questDay").textContent=currentDay;
+  document.getElementById("mapCoins").textContent=coins;
+}
+
+function startQuest(){
+  answers=[false,false,false];
+  const d=DAYS[currentDay-1];
+  const box=document.getElementById("questions");
+  box.innerHTML=d.pairs.map((p,i)=>`
+    <div class="question">
+      <div class="qno">문제 ${i+1}</div>
+      <div class="quest-q">${p.q}</div>
+      <div class="ko">${p.qk}</div>
+
+      <div class="qtools">
+        <button class="qtool" onclick="speak('${esc(p.q)}')">🔊 질문 듣기</button>
+        <button class="qtool hint" id="show-${i}" onclick="toggleAnswer(${i})">👀 정답 보기</button>
+      </div>
+
+      <div class="quest-answer">
+        <div class="quest-a answer-hidden" id="answer-${i}">${p.a}</div>
+        <div class="ko answer-hidden" id="answerKo-${i}">${p.ak}</div>
+      </div>
+
+      <div class="qtools">
+        <button class="qtool" onclick="speak('${esc(p.a)}')">🔊 정답 듣기</button>
+        <button class="qtool" onclick="speak('${esc(p.a)}', 'en-US', .72)">🐢 천천히 듣기</button>
+      </div>
+
+      <button class="mic" id="mic-${i}" onclick="listenAnswer(${i})">🎤 눌러서 대답하기</button>
+      <div class="heard" id="heard-${i}">아직 말하지 않았어요.</div>
+    </div>
+  `).join("");
+
+  document.getElementById("resultContent").classList.add("hidden");
+  document.getElementById("questContent").classList.remove("hidden");
+  document.getElementById("questModal").classList.remove("hidden");
+}
+
+function toggleAnswer(i){
+  const a=document.getElementById("answer-"+i), k=document.getElementById("answerKo-"+i), b=document.getElementById("show-"+i);
+  const hidden=a.classList.contains("answer-hidden");
+  a.classList.toggle("answer-hidden",!hidden); k.classList.toggle("answer-hidden",!hidden);
+  b.textContent=hidden?"🙈 정답 가리기":"👀 정답 보기";
+}
+function closeQuest(){ speechSynthesis?.cancel?.(); document.getElementById("questModal").classList.add("hidden"); }
+document.getElementById("startQuest").onclick=startQuest;
+document.getElementById("closeQuest").onclick=closeQuest;
+
+function normalize(s){
+  return s.toLowerCase().replace(/[.,!?'"’]/g,"").replace(/\s+/g," ").trim();
+}
+function similarity(spoken,target){
+  const sw=normalize(spoken).split(" ").filter(Boolean), tw=normalize(target).split(" ").filter(Boolean);
+  let matched=0;
+  const used=new Set();
+  tw.forEach(t=>{ const j=sw.findIndex((w,idx)=>!used.has(idx) && (w===t || (w.length>3 && (w.startsWith(t)||t.startsWith(w))))); if(j>=0){used.add(j);matched++;} });
+  return tw.length?matched/tw.length:0;
+}
+
+function listenAnswer(i){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert("이 기기에서는 음성 인식을 사용할 수 없습니다. Android Chrome에서 실행해 주세요.");return;}
+  const r=new SR(); r.lang="en-US"; r.interimResults=false; r.maxAlternatives=3;
+  const btn=document.getElementById("mic-"+i), heard=document.getElementById("heard-"+i);
+  btn.textContent="🎧 듣는 중..."; heard.textContent="영어로 대답해 보세요.";
+  r.onresult=e=>{
+    const alternatives=Array.from(e.results[0]).map(x=>x.transcript);
+    const target=DAYS[currentDay-1].pairs[i].a;
+    const best=alternatives.map(x=>({t:x,s:similarity(x,target)})).sort((a,b)=>b.s-a.s)[0];
+    answers[i]=best.s>=0.72;
+    heard.innerHTML=answers[i]?`<span class="pass">✅ 통과!</span><br>인식: ${best.t}`:`<span class="fail">❌ 다시 해볼까요?</span><br>인식: ${best.t}`;
+    btn.textContent="🎤 다시 말하기";
+  };
+  r.onerror=e=>{
+    btn.textContent="🎤 다시 말하기";
+    if(e.error==="not-allowed") alert("Chrome의 사이트 설정에서 마이크 권한을 허용해 주세요.");
+    else heard.textContent="잘 듣지 못했어요. 다시 시도해 주세요.";
+  };
+  r.start();
+}
+
+function checkQuest(){
+  const ok=answers.every(Boolean);
+  const result=document.getElementById("resultContent");
+  document.getElementById("questContent").classList.add("hidden");
+  result.classList.remove("hidden");
+
+  if(ok){
+    const completed=currentDay;
+    const rewardKey="rewardDay-"+completed;
+    const got=localStorage.getItem(rewardKey)==="yes";
+    if(!got){coins+=10;localStorage.setItem(rewardKey,"yes");}
+    if(currentDay<100)currentDay++;
+    localStorage.setItem("coins",coins);
+    localStorage.setItem("currentDay",currentDay);
+    result.innerHTML=`<div class="result"><div class="big">🎉</div><h2>DAY ${completed} 성공!</h2>
+      <p>세 개의 Q&A를 모두 통과했어요.<br>${got?"이 DAY는 이미 코인을 받았어요.":"<b>🪙 10코인 획득!</b>"}<br><br>카피바라가 <b>DAY ${currentDay}</b>로 이동합니다.</p>
+      <div class="actions"><button class="primary" onclick="finishSuccess()">🐾 다음 DAY로 이동</button></div></div>`;
+  } else {
+    result.innerHTML=`<div class="result"><div class="big">🌱</div><h2>조금만 더 연습해요</h2>
+      <p>세 답변을 모두 통과하면 다음 DAY로 갈 수 있어요.<br>정답을 보고 듣고 따라 말해도 괜찮아요.</p>
+      <div class="actions"><button class="secondary" onclick="closeQuest()">닫기</button><button class="primary" onclick="startQuest()">🎤 다시 도전</button></div></div>`;
+  }
+}
+document.getElementById("checkQuest").onclick=checkQuest;
+
+function finishSuccess(){
+  closeQuest(); viewDay=currentDay; renderStudy(); renderMap();
+  setTimeout(()=>document.getElementById("day-"+currentDay)?.scrollIntoView({behavior:"smooth",block:"center"}),120);
+}
+
+renderStudy();
+</script>
+</body>
+</html>
